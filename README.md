@@ -3,9 +3,9 @@
 This project uses Markov chain Monte Carlo to study the one-dimensional
 Gaussian system with Hamiltonian
 
-$$
+```math
 H(x)=x^2.
-$$
+```
 
 The program samples the corresponding Boltzmann distribution using a
 random-walk Metropolis algorithm, estimates the mean energy with
@@ -101,32 +101,32 @@ verified environment. Runtime depends on the Python and NumPy builds in use.
 
 At inverse temperature $\beta>0$, the unnormalised Boltzmann distribution is
 
-$$
+```math
 p_\beta(x)\propto e^{-\beta H(x)}=e^{-\beta x^2}.
-$$
+```
 
 The partition function is
 
-$$
+```math
 Z(\beta)
 =
 \int_{-\infty}^{\infty}e^{-\beta x^2}\,dx
 =
 \sqrt{\frac{\pi}{\beta}}.
-$$
+```
 
 The normalized density is therefore
 
-$$
+```math
 p_\beta(x)
 =
 \sqrt{\frac{\beta}{\pi}}e^{-\beta x^2}.
-$$
+```
 
 The mean energy follows from either direct Gaussian integration or a
 derivative of $\ln Z$:
 
-$$
+```math
 \left\langle H\right\rangle_\beta
 =
 \left\langle x^2\right\rangle_\beta
@@ -134,7 +134,7 @@ $$
 -\frac{\partial\ln Z}{\partial\beta}
 =
 \frac{1}{2\beta}.
-$$
+```
 
 This exact expression is used throughout the program to assess the numerical
 estimates without influencing the sampling calculation.
@@ -184,29 +184,29 @@ For each value of $\beta$, the program:
 
 From a current position $x$, the algorithm proposes
 
-$$
+```math
 x'=x+\delta,
-$$
+```
 
 where
 
-$$
+```math
 \delta\sim\mathcal{U}(-e,e).
-$$
+```
 
 The change in energy is
 
-$$
+```math
 \Delta H=H(x')-H(x)=x'^2-x^2.
-$$
+```
 
 The proposal is accepted with probability
 
-$$
+```math
 P_{\mathrm{accept}}
 =
 \min\left(1,e^{-\beta\Delta H}\right).
-$$
+```
 
 This rule accepts every downhill move and accepts uphill moves according to
 their Boltzmann probability. Rejected proposals repeat the current state in the
@@ -217,9 +217,9 @@ chain, as required for a correct Markov process.
 The characteristic width of the target Gaussian changes as
 $1/\sqrt{\beta}$. The proposal half-width is therefore scaled using
 
-$$
+```math
 e(\beta)=\frac{2}{\sqrt{\beta}}.
-$$
+```
 
 This produces acceptance rates close to $0.514$ at all five temperatures. In a
 controlled comparison at $\beta=1$, changing the proposal width from $1$ to
@@ -264,11 +264,11 @@ For an observable $O$, the samples are divided into $B$ blocks of size 100.
 The program calculates each block mean $\bar O_b$ and estimates the standard
 error as
 
-$$
+```math
 \sigma_{\bar O}
 =
 \frac{s_{\mathrm{block}}}{\sqrt{B}},
-$$
+```
 
 where $s_{\mathrm{block}}$ is the sample standard deviation of the block
 means. The block size is substantially larger than the measured correlation
@@ -282,15 +282,15 @@ reported.
 
 For lag $k$, the code uses the biased estimator
 
-$$
+```math
 C(k)
 =
 \frac{
 \sum_{i=1}^{N-k}(H_i-\bar H)(H_{i+k}-\bar H)
 }{
-N\,\operatorname{Var}(H)
+N\,\mathrm{Var}(H)
 }.
-$$
+```
 
 The autocorrelation is evaluated only for the requested 100 lags rather than
 calculating an unnecessary full $N\times N$ correlation. The four
@@ -301,7 +301,7 @@ $\beta=1$ chain estimates are averaged for the displayed diagnostic.
 Suppose samples were generated at $\beta_0$. An expectation value at a new
 inverse temperature $\beta_1$ can be written as
 
-$$
+```math
 \langle O\rangle_{\beta_1}
 =
 \frac{
@@ -309,23 +309,23 @@ $$
 }{
 \left\langle w(x)\right\rangle_{\beta_0}
 },
-$$
+```
 
 with
 
-$$
+```math
 w(x)
 =
 e^{-(\beta_1-\beta_0)x^2}.
-$$
+```
 
 For the energy observable, the numerical estimator is
 
-$$
+```math
 \widehat{E}_{\beta_1}
 =
 \frac{\sum_i x_i^2w_i}{\sum_i w_i}.
-$$
+```
 
 The calculation subtracts the largest log weight before exponentiation. This
 does not change the ratio, but prevents avoidable floating-point overflow and
@@ -340,15 +340,15 @@ an independent-sample formula to the weights.
 If $N_b$ and $D_b$ are the weighted numerator and denominator contributed by
 block $b$, the leave-one-block-out estimate is
 
-$$
+```math
 \widehat{E}_{(b)}
 =
 \frac{N-N_b}{D-D_b}.
-$$
+```
 
 With $B$ blocks, the jackknife standard error is
 
-$$
+```math
 \sigma_{\mathrm{JK}}
 =
 \sqrt{
@@ -358,7 +358,7 @@ $$
 \widehat{E}_{(b)}-\overline{\widehat{E}}_{(\cdot)}
 \right)^2
 }.
-$$
+```
 
 When $\beta_1=\beta_0$, this implementation reduces numerically to the ordinary
 binned standard error.
@@ -367,11 +367,11 @@ binned standard error.
 
 The program reports
 
-$$
+```math
 N_{\mathrm{eff},w}
 =
 \frac{\left(\sum_iw_i\right)^2}{\sum_iw_i^2}.
-$$
+```
 
 The displayed percentage is $N_{\mathrm{eff},w}/N$. This measures weight
 concentration only; it is not an autocorrelation-adjusted count of independent
@@ -384,34 +384,34 @@ regions that matter in the target ensemble.
 
 For Gaussian reweighting, the second weight moment behaves as
 
-$$
+```math
 \left\langle w^2\right\rangle_{\beta_0}
 \propto
 \int_{-\infty}^{\infty}
 e^{-(2\beta_1-\beta_0)x^2}\,dx.
-$$
+```
 
 It is finite only when
 
-$$
+```math
 2\beta_1>\beta_0.
-$$
+```
 
 ### Unstable direct route
 
 For direct reweighting from $\beta_0=1$ to $\beta_1=0.5$,
 
-$$
+```math
 2\beta_1-\beta_0=0.
-$$
+```
 
 Consequently,
 
-$$
+```math
 \left\langle w^2\right\rangle_{\beta=1}
 \propto
 \int_{-\infty}^{\infty}dx,
-$$
+```
 
 which diverges. A finite run can still produce a plausible point estimate and
 a finite empirical effective sample size, but those observations do not remove
@@ -426,15 +426,15 @@ The program retains this calculation under `diagnostic_reweighted` and prints
 The primary estimate at $\beta=0.5$ instead uses samples generated at
 $\beta=0.75$:
 
-$$
+```math
 0.75\longrightarrow0.5.
-$$
+```
 
 Here,
 
-$$
+```math
 2(0.5)-0.75=0.25>0,
-$$
+```
 
 so the weight variance is finite. The default primary routes are
 
@@ -497,7 +497,7 @@ reweighting route must use configured values of $\beta$.
 
 ### Primary reweighting
 
-| Route | Exact | Reweighted estimate | Relative error | Weight ESS | Finite $\operatorname{Var}(w)$ |
+| Route | Exact | Reweighted estimate | Relative error | Weight ESS | Finite $\mathrm{Var}(w)$ |
 |---:|---:|---:|---:|---:|:---:|
 | $1.00\to0.75$ | 0.666667 | $0.666419\pm0.004903$ | 0.037% | 94.19% | Yes |
 | $1.00\to1.50$ | 0.333333 | $0.331263\pm0.001073$ | 0.621% | 94.30% | Yes |
@@ -506,7 +506,7 @@ reweighting route must use configured values of $\beta$.
 
 ### Unstable route diagnostic
 
-| Route | Exact | Estimate | Relative error | Weight ESS | Finite $\operatorname{Var}(w)$ |
+| Route | Exact | Estimate | Relative error | Weight ESS | Finite $\mathrm{Var}(w)$ |
 |---:|---:|---:|---:|---:|:---:|
 | $1.00\to0.50$ | 1.000000 | $1.004183\pm0.017768$ | 0.418% | 50.78% | **No** |
 
